@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Dictionary Generator{% endblock %}
+{% block content %}
+<h1>Test Dictionary Generator</h1>
+<p class="muted">Creates a small, bounded wordlist for your authorized lab.</p>
+
+<section class="panel">
+<form method="post">
+    <label>Name / seed</label>
+    <input name="name" placeholder="e.g. demo">
+    <label>Year</label>
+    <input name="year" placeholder="e.g. 2026">
+    <label>Keyword</label>
+    <input name="keyword" placeholder="e.g. company">
+    <button class="btn" type="submit">Generate Wordlist</button>
+</form>
+</section>
+
+{% if generated %}
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Generated Candidates ({{ generated|length }})</h2>
+        <a class="btn" href="{{ url_for('download_wordlist') }}">Download</a>
+    </div>
+    <div class="wordlist">
+    {% for word in generated %}
+        <code>{{ word }}</code>
+    {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

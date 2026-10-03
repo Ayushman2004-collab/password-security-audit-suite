@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Brute-Force Simulator{% endblock %}
+{% block content %}
+<h1>Bounded Brute-Force Simulator</h1>
+<p class="muted">Educational local simulation only. The server limits maximum length to 4. Estimates are based on the measured local rate.</p>
+
+<section class="panel">
+<form method="post">
+    <label>Lab target password</label>
+    <input type="text" name="target" placeholder="Example: abc" required>
+    <label>Maximum length</label>
+    <input type="number" name="max_length" value="3" min="1" max="4">
+    <label>Character set</label>
+    <select name="charset">
+        <option value="lowercase">Lowercase a-z</option>
+        <option value="uppercase">Uppercase A-Z</option>
+        <option value="letters">Letters a-z + A-Z</option>
+        <option value="lowercase_digits">Lowercase + digits</option>
+        <option value="letters_digits">Letters + digits</option>
+        <option value="digits">Digits only</option>
+        <option value="letters_digits_symbols">Letters + digits + symbols</option>
+    </select>
+    <button class="btn" type="submit">Run Simulation</button>
+</form>
+</section>
+
+{% if result %}
+<section class="panel">
+    <h2>{{ "Password Found" if result.found else "Not Found" }}</h2>
+    {% if result.found %}
+        <p>Candidate: <code>{{ result.candidate }}</code></p>
+    {% endif %}
+    <div class="stats">
+        <div><strong>{{ result.attempts }}</strong><span>Attempts</span></div>
+        <div><strong>{{ result.elapsed }}s</strong><span>Elapsed</span></div>
+        <div><strong>{{ result.rate }}</strong><span>Attempts/sec</span></div>
+        <div><strong>{{ result.search_space }}</strong><span>Search space</span></div>
+    </div>
+    <p><strong>Estimated worst-case time:</strong> {{ result.estimated_worst_case }}</p>
+</section>
+{% endif %}
+{% endblock %}

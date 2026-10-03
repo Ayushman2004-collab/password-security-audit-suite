@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<h1>Security Reports</h1>
+<section class="panel">
+    <form method="post" action="{{ url_for('generate_report') }}">
+        <button class="btn" type="submit">Generate JSON + CSV Report</button>
+    </form>
+</section>
+
+<section class="panel">
+<h2>Generated Files</h2>
+<ul>
+{% for report in reports %}
+    <li><code>{{ report.name }}</code></li>
+{% else %}
+    <li>No reports generated yet.</li>
+{% endfor %}
+</ul>
+</section>
+{% endblock %}

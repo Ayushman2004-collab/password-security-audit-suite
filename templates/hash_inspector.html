@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Hash Format Inspector{% endblock %}
+{% block content %}
+<h1>Offline Hash Format Inspector</h1>
+<p class="muted">Analyze user-supplied lab exports such as shadow-style lines or sample hash lists. This module never reads SAM, SYSTEM, /etc/shadow, or other local credential stores.</p>
+
+<section class="panel">
+<form method="post" enctype="multipart/form-data">
+    <label>Paste authorized lab data</label>
+    <textarea name="lab_text" rows="10" placeholder="demo:$6$rounds=5000$salt$example-hash
+sample:5f4dcc3b5aa765d61d8327deb882cf99"></textarea>
+    <label>Or upload a text export</label>
+    <input type="file" name="lab_file" accept=".txt,.log,.lst,.csv">
+    <button class="btn" type="submit">Identify Hash Formats</button>
+</form>
+</section>
+
+{% if records is not none %}
+<section class="panel">
+<h2>Analysis Results</h2>
+<table>
+<thead><tr><th>Line</th><th>User/Label</th><th>Detected Format</th><th>Confidence</th></tr></thead>
+<tbody>
+{% for row in records %}
+<tr>
+    <td>{{ row.line }}</td>
+    <td>{{ row.username or "—" }}</td>
+    <td>{{ row.format }}</td>
+    <td>{{ row.confidence }}</td>
+</tr>
+{% else %}
+<tr><td colspan="4">No usable records found.</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</section>
+{% endif %}
+{% endblock %}

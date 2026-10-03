@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Password Analyzer{% endblock %}
+{% block content %}
+<h1>Password Strength Analyzer</h1>
+<p class="muted">Analyze a test password locally. Do not enter production credentials.</p>
+
+<section class="panel">
+<form method="post">
+    <label>Test password</label>
+    <input type="password" name="password" placeholder="Enter lab test password" required>
+    <button class="btn" type="submit">Analyze Password</button>
+</form>
+</section>
+
+{% if result %}
+<section class="panel">
+    <div class="result-header">
+        <div>
+            <h2>Analysis Result</h2>
+            <p class="score">{{ result.score }}/100</p>
+        </div>
+        <span class="badge {{ result.strength|lower }}">{{ result.strength }}</span>
+    </div>
+
+    <div class="stats">
+        <div><strong>{{ result.length }}</strong><span>Length</span></div>
+        <div><strong>{{ result.entropy }}</strong><span>Entropy estimate</span></div>
+        <div><strong>{{ "Yes" if result.dictionary_match else "No" }}</strong><span>Common password</span></div>
+    </div>
+
+    <h3>Detected characteristics</h3>
+    <ul class="checks">
+        <li>Lowercase: {{ "Yes" if result.lowercase else "No" }}</li>
+        <li>Uppercase: {{ "Yes" if result.uppercase else "No" }}</li>
+        <li>Digits: {{ "Yes" if result.digits else "No" }}</li>
+        <li>Special characters: {{ "Yes" if result.special else "No" }}</li>
+        <li>Predictable sequence: {{ "Yes" if result.sequence_detected else "No" }}</li>
+        <li>Repeated pattern: {{ "Yes" if result.repeated_pattern else "No" }}</li>
+    </ul>
+
+    <h3>Recommendations</h3>
+    <ul>
+    {% for item in result.recommendations %}
+        <li>{{ item }}</li>
+    {% endfor %}
+    </ul>
+</section>
+{% endif %}
+{% endblock %}

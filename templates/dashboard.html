@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<header class="page-header">
+    <div>
+        <h1>Password Security Dashboard</h1>
+        <p>Controlled password auditing and attack simulation.</p>
+    </div>
+</header>
+
+<div class="cards">
+    <div class="card"><span>Total Tests</span><strong>{{ total }}</strong></div>
+    <div class="card danger"><span>Weak</span><strong>{{ weak }}</strong></div>
+    <div class="card warning"><span>Medium</span><strong>{{ medium }}</strong></div>
+    <div class="card success"><span>Strong</span><strong>{{ strong }}</strong></div>
+    <div class="card danger"><span>High Risk</span><strong>{{ high_risk }}</strong></div>
+</div>
+
+<div class="grid-2">
+    <section class="panel">
+        <h2>Password Strength</h2>
+        <div id="strengthChart"></div>
+    </section>
+    <section class="panel">
+        <h2>Simulation Matches</h2>
+        <div id="attackChart"></div>
+    </section>
+</div>
+
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Recent Tests</h2>
+        <form method="post" action="{{ url_for('clear_history') }}">
+            <button class="btn danger-btn" type="submit">Clear History</button>
+        </form>
+    </div>
+    <table>
+        <thead><tr><th>Strength</th><th>Severity</th><th>Length</th><th>Entropy</th><th>Dictionary</th><th>Brute Force</th></tr></thead>
+        <tbody>
+        {% for row in history %}
+        <tr>
+            <td><span class="badge {{ row.strength|lower }}">{{ row.strength }}</span></td>
+            <td>{{ row.severity or "—" }}</td>
+            <td>{{ row.length }}</td>
+            <td>{{ row.entropy }}</td>
+            <td>{{ "MATCH" if row.dictionary_match else "No" }}</td>
+            <td>{{ "MATCH" if row.bruteforce_match else "No" }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No tests yet. Start with Password Analyzer.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<script>
+const chart = {{ chart_data|safe }};
+Plotly.newPlot("strengthChart", [{
+    x: chart.labels, y: chart.values, type: "bar"
+}], {margin:{t:10,l:45,r:10,b:45}});
+
+Plotly.newPlot("attackChart", [{
+    x: chart.attack_labels, y: chart.attack_values, type: "bar"
+}], {margin:{t:10,l:45,r:10,b:75}});
+</script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Hash Simulator{% endblock %}
+{% block content %}
+<h1>SHA-256 Hash Simulator</h1>
+<p class="muted">This module compares supplied test candidates against a supplied SHA-256 hash.</p>
+
+<section class="panel">
+    <p><strong>Demo hash for Password123!:</strong></p>
+    <code class="long-code">{{ sample_hash }}</code>
+    <form method="post">
+        <label>Target SHA-256 hash</label>
+        <input name="target_hash" placeholder="64 hexadecimal characters" required>
+        <label>Candidate passwords (one per line)</label>
+        <textarea name="candidates" rows="8" placeholder="Password123!&#10;welcome&#10;demo123"></textarea>
+        <button class="btn" type="submit">Run Hash Test</button>
+    </form>
+</section>
+
+{% if result %}
+<section class="panel">
+    <h2>{{ "Match Found" if result.found else "No Match" }}</h2>
+    <p>Attempts: <strong>{{ result.attempts }}</strong></p>
+    {% if result.found %}
+    <p>Matching test candidate: <code>{{ result.candidate }}</code></p>
+    {% endif %}
+</section>
+{% endif %}
+{% endblock %}

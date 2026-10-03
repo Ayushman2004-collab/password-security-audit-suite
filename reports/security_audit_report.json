@@ -1,0 +1,26 @@
+{
+  "summary": {
+    "total_tests": 2,
+    "weak": 2,
+    "medium": 0,
+    "strong": 0,
+    "dictionary_matches": 1,
+    "bruteforce_matches": 1
+  },
+  "tests": [
+    {
+      "strength": "Weak",
+      "entropy": 56.87,
+      "length": 11,
+      "dictionary_match": true,
+      "bruteforce_match": false
+    },
+    {
+      "strength": "Weak",
+      "entropy": 14.1,
+      "length": 3,
+      "dictionary_match": false,
+      "bruteforce_match": true
+    }
+  ]
+}
